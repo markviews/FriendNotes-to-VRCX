@@ -12,9 +12,8 @@ async function loadSettings() {
             try {
                 settings = JSON.parse(data);
                 settings.VRCX_path = settings.VRCX_path.replaceAll('%appdata%', process.env.APPDATA)
-
             } catch (e) {
-                console.log('Failed to read settings.json. Try re-downloading it')
+                resolve('error')
             }
 
             resolve()
@@ -29,7 +28,7 @@ function setupDatabase() {
       
         db = new sqlite3.Database(settings.VRCX_path, (err) => {
             if (err) {
-                console.log("Error Occured - " + err.message);
+                resolve('error')
             } else {
                 console.log("DataBase Connected");
             }
@@ -77,7 +76,10 @@ function getFriendNotes() {
         var notes = {}
       
         fs.readFile(settings.FriendNotes_path, 'utf8', function (err, data) {
-            if (err) throw (err);
+            if (err) {
+                resolve('error')
+                return
+            }
         
             var json = JSON.parse(data);
         
@@ -121,10 +123,22 @@ function getFriendNotes() {
 }
 
 async function doThings() {
-    await loadSettings()
-    await setupDatabase()
+    if (await loadSettings() == 'error') {
+        console.log(temp)
+        console.error("Failed to read settings.json. Try re-downloading it")
+        return
+    }
+
+    if (await setupDatabase() == 'error') {
+        console.error("Couldn't find VRCX.sqlite3. Make sure VRCX_path is set correctly in settings.json")
+        return
+    }
 
     var notes = await getFriendNotes()
+    if (notes == 'error') {
+        console.error("Couldn't find FriendNotes.json. Make sure FriendNotes_path is set correctly in settings.json")
+        return
+    }
 
     for (const [user_id, friendNotesnote] of Object.entries(notes)) {
         var vrcxNote = await getVRCXNote(user_id)
