@@ -2,6 +2,10 @@ const sqlite3 = require("sqlite3");
 const fs = require('fs');
 const date = require('date-and-time')
 
+//keep console open in .exe version
+//const readline = require('readline')
+//const rl = readline.createInterface({input: process.stdin,output: process.stdout})
+
 var settings = {}
 var db;
 
@@ -12,11 +16,24 @@ async function loadSettings() {
             try {
                 settings = JSON.parse(data);
                 settings.VRCX_path = settings.VRCX_path.replaceAll('%appdata%', process.env.APPDATA)
+                resolve()
             } catch (e) {
-                resolve('error')
-            }
 
-            resolve()
+                var defaultSettings = {
+                    "dateFormat": "M/D/YY - h:mm A",
+                    "include_DateAdded": true,
+                    "include_PastNames": true,
+                    "include_Notes": true,
+                    "VRCX_path": "%appdata%\\VRCX\\VRCX.sqlite3",
+                    "FriendNotes_path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\VRChat\\UserData\\FriendNotes.json"
+                }
+
+                fs.writeFile('settings.json', JSON.stringify(defaultSettings, null, 4), function (err) {
+                    if (err) return console.error('Failed to generate settings.json');
+                    resolve('error')
+                });
+                
+            }
             
         });
 
@@ -124,7 +141,7 @@ function getFriendNotes() {
 
 async function doThings() {
     if (await loadSettings() == 'error') {
-        console.error("Failed to read settings.json. Try re-downloading it")
+        console.error("settings.json generated. Review settings and run program again.")
         return
     }
 
@@ -151,6 +168,8 @@ async function doThings() {
         var newNote = (vrcxNote + '\n' + friendNotesnote).trim()
         await setVRCXNote(user_id, newNote)
     }
+
+    console.log('done')
 }
 
 doThings();
