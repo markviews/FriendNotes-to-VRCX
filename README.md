@@ -2,6 +2,7 @@
 Adds your FriendNotes notes to VRCX
 
 ### How to use
+Follow instructions on the [releases page](https://github.com/markviews/FriendNotes-to-VRCX/releases) (easier) or:
 1. Install [VRCX](https://github.com/pypy-vrc/VRCX/releases)
 2. Install [Node.js](https://nodejs.org/en/download/)
 3. Install Node.js libraries (open cmd.exe and type `npm install sqlite3 date-and-time`)
