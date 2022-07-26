@@ -124,7 +124,6 @@ function getFriendNotes() {
 
 async function doThings() {
     if (await loadSettings() == 'error') {
-        console.log(temp)
         console.error("Failed to read settings.json. Try re-downloading it")
         return
     }
