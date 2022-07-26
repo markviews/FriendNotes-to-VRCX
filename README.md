@@ -1,5 +1,5 @@
 # FriendNotes-to-VRCX
-Converts FriendNotes notes to VRCX notes
+Adds your FriendNotes notes to VRCX
 
 ### How to use
 1. Install [VRCX](https://github.com/pypy-vrc/VRCX/releases)
