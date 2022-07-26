@@ -1,0 +1,8 @@
+{
+    "dateFormat": "M/D/YY - h:mm A",
+    "include_DateAdded": true,
+    "include_PastNames": true,
+    "include_Notes": true,
+    "VRCX_path": "%appdata%\\VRCX\\VRCX.sqlite3",
+    "FriendNotes_path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\VRChat\\UserData\\FriendNotes.json"
+}
